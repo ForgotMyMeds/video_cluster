@@ -1,0 +1,18 @@
+src/ImageLogic.d: ../src/ImageLogic.cpp ../src/./include/Storm.h \
+ ../src/./include/ImageLogic.h ../src/./include/Storm.h \
+ ../src/./include/decode.h ../src/./include/mtcnn.h \
+ ../src/./include/network.h ../src/./include/pBox.h
+
+../src/./include/Storm.h:
+
+../src/./include/ImageLogic.h:
+
+../src/./include/Storm.h:
+
+../src/./include/decode.h:
+
+../src/./include/mtcnn.h:
+
+../src/./include/network.h:
+
+../src/./include/pBox.h:
