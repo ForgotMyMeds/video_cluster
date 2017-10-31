@@ -509,7 +509,7 @@ mtcnn::~mtcnn(){
     delete []simpleFace_;
 }
 
-void mtcnn::findFace(Mat &image){
+bool mtcnn::findFace(Mat &image){
     struct orderScore order;
     int count = 0;
     for (size_t i = 0; i < scales_.size(); i++) {
@@ -533,7 +533,7 @@ void mtcnn::findFace(Mat &image){
         simpleFace_[i].boundingBox_.clear();
     }
     //the first stage's nms
-    if(count<1)return;
+    if(count<1)return false;
     nms(firstBbox_, firstOrderScore_, nms_threshold[0]);
     refineAndSquareBbox(firstBbox_, image.rows, image.cols);
 
@@ -559,7 +559,7 @@ void mtcnn::findFace(Mat &image){
             }
         }
     }
-    if(count<1)return;
+    if(count<1)return false;
     nms(secondBbox_, secondBboxScore_, nms_threshold[1]);
     refineAndSquareBbox(secondBbox_, image.rows, image.cols);
 
@@ -594,7 +594,7 @@ void mtcnn::findFace(Mat &image){
         }
     }
 
-    if(count<1)return;
+    if(count<1)return false;
     refineAndSquareBbox(thirdBbox_, image.rows, image.cols);
     nms(thirdBbox_, thirdBboxScore_, nms_threshold[2], "Min");
     for(vector<struct Bbox>::iterator it=thirdBbox_.begin(); it!=thirdBbox_.end();it++){
@@ -608,7 +608,7 @@ void mtcnn::findFace(Mat &image){
             double dx = (int)*(it->ppoint+1) - (int)*(it->ppoint);
 
             double angle = atan2(dy, dx) * 180.0/CV_PI;
-            printf("%f  %f   %f\n",dx,dy,angle);
+       //     printf("%f  %f   %f\n",dx,dy,angle);
             Mat rot_mat = getRotationMatrix2D(eyesCenter, angle, 1.0);
             Mat warp_frame;
             warpAffine(image, warp_frame, rot_mat, warp_frame.size());
@@ -624,4 +624,5 @@ void mtcnn::findFace(Mat &image){
     secondBboxScore_.clear();
     thirdBbox_.clear();
     thirdBboxScore_.clear();
+    return true;
 }

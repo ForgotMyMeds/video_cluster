@@ -86,9 +86,16 @@ public:
 		/*imwrite("/mnt/storm_out/"+cameraId+timestamp+".png",mat);
 		os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<".png" << std::endl;*/
 
-		findimg->findFace(mat);
-	    imwrite("/mnt/storm_out/"+cameraId+timestamp+"_result.png",mat);
-		os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<"result.png" << std::endl;
+		if (findimg->findFace(mat))
+		{
+		    imwrite("/mnt/storm_out/"+cameraId+timestamp+"_result.png",mat);
+			os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<"result.png" << std::endl;
+		}
+		else
+		{
+		    imwrite("/mnt/storm_out/"+cameraId+timestamp+".png",mat);
+			os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<".png" << std::endl;
+		}
 
 	}
 
