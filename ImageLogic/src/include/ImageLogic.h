@@ -20,6 +20,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "mtcnn.h"
+#include "helpers.hpp"
 
 using namespace std;
 
@@ -86,10 +87,36 @@ public:
 		/*imwrite("/mnt/storm_out/"+cameraId+timestamp+".png",mat);
 		os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<".png" << std::endl;*/
 
-		if (findimg->findFace(mat))
+		vector<struct Bbox> outbox;
+		if (findimg->findFace(mat,outbox))
 		{
-		    imwrite("/mnt/storm_out/"+cameraId+timestamp+"_result.png",mat);
-			os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<"result.png" << std::endl;
+			string iii="i";
+		    for(vector<struct Bbox>::iterator it=outbox.begin(); it!=outbox.end();it++){
+
+		        if((*it).exist){
+		//	    printf("face score is:%f\n",it->score);
+		          //  rectangle(mat, Point((*it).y1, (*it).x1), Point((*it).y2, (*it).x2), Scalar(0,0,255), 2,8,0);
+		          //  for(int num=0;num<5;num++)circle(mat,Point((int)*(it->ppoint+num), (int)*(it->ppoint+num+5)),3,Scalar(0,255,255), -1);
+		            Point2f eyesCenter = Point2f( ((int)*(it->ppoint) +(int)*(it->ppoint+1)) * 0.5f, ((int)*(it->ppoint+5) + (int)*(it->ppoint+6)) * 0.5f );
+		        //    circle(image,eyesCenter,3,Scalar(0,255,255), -1);
+		            double dy = (int)*(it->ppoint+6) - (int)*(it->ppoint+5);
+		            double dx = (int)*(it->ppoint+1) - (int)*(it->ppoint);
+
+		            double angle = atan2(dy, dx) * 180.0/CV_PI;
+		       //     printf("%f  %f   %f\n",dx,dy,angle);
+		            Mat rot_mat = getRotationMatrix2D(eyesCenter, angle, 1.0);
+		            Mat warp_frame;
+		            warpAffine(mat, warp_frame, rot_mat, warp_frame.size());
+
+		            cv::Rect r(Point((*it).y1, (*it).x1), Point((*it).y2, (*it).x2));
+		            Mat cropped_img = cropImage(warp_frame,r);
+		            Mat resized_img;
+		            cv::resize(cropped_img, resized_img, cv::Size(96, 112));
+				      imwrite("/mnt/storm_out/"+cameraId+timestamp+"_result"+iii+".png",resized_img);
+					   os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<"result"+iii+".png" << std::endl;
+					   iii=iii+"i";
+		         }
+		     }
 		}
 		else
 		{

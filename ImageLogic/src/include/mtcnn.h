@@ -139,7 +139,7 @@ class mtcnn
 public:
     mtcnn(int row, int col);
     ~mtcnn();
-    bool findFace(Mat &image);
+    bool findFace(Mat &image, vector<struct Bbox> &outbox);
 private:
     Mat reImage;
     float nms_threshold[3];
