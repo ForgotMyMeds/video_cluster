@@ -13,6 +13,7 @@ import java.util.Map;
 public class PicProcessBolt  extends ShellBolt implements IRichBolt {
     public PicProcessBolt()
     {
+
         super("/bin/sh","im_proc.sh");
     }
 

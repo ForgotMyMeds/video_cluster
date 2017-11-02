@@ -64,6 +64,7 @@ public:
 	{
 		int i = 0;
 		std::string s = tuple.GetValues()[i].asString();
+	//	std::string cameraId = tuple.GetValues()[1].asString();
 		kCount_[s]++;
 	//	os_ << s << ":" << kCount_[s] << std::endl;
 		Json::Reader reader;
@@ -71,6 +72,7 @@ public:
 		if (!reader.parse(s, obj))
 		{
 			os_ << "Json object creation failed!!!" << std::endl;
+			os_ << s << ":" << kCount_[s] << std::endl;
 			return;
 		}
 		std::string cameraId=obj["cameraId"].asString();

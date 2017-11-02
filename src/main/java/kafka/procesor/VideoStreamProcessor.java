@@ -46,11 +46,12 @@ public class VideoStreamProcessor {
         spoutConf.zkPort = 2181;
         //JsonBolt jsonBolt = new JsonBolt();
         PicProcessBolt testBolt = new PicProcessBolt();
+        GroupingBolt groupBolt= new GroupingBolt();
 
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout(KAFKA_SPOUT_ID, new KafkaSpout(spoutConf));
-        builder.setBolt(JsonProject_BOLT_ID, testBolt).shuffleGrouping(
-                KAFKA_SPOUT_ID);
+        builder.setBolt("grouping-bolt", groupBolt).shuffleGrouping(KAFKA_SPOUT_ID);
+        builder.setBolt(JsonProject_BOLT_ID, testBolt).fieldsGrouping("grouping-bolt", new Fields("cam"));
 
         Config config = new Config();
         config.setNumWorkers(1);
