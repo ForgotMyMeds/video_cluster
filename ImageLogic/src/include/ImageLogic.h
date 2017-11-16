@@ -17,6 +17,7 @@
 #include <jsoncpp/json/json.h>
 #include "Storm.h"
 #include "decode.h"
+#include "ZBase64.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "mtcnn.h"
@@ -50,11 +51,15 @@ public:
 	{
 		os_.open("/mnt/storm_out/test.txt", std::ios_base::out | std::ios_base::app);
 		findimg=new mtcnn(480,640);
+	//	input = (unsigned char*)calloc(sizeof(unsigned char),32258);
+	//	output = (unsigned char*)calloc(sizeof(unsigned char),BASE64_ENCODE_OUT_SIZE(32258));
 	}
 
 	~ImageLogic()
 	{
 		os_.close();
+	//	free(input);
+	//	free(output);
 	}
 
 	void Initialize(Json::Value conf, Json::Value context) {
@@ -92,7 +97,7 @@ public:
 		vector<struct Bbox> outbox;
 		if (findimg->findFace(mat,outbox))
 		{
-			string iii="i";
+			string iii="facei";
 		    for(vector<struct Bbox>::iterator it=outbox.begin(); it!=outbox.end();it++){
 
 		        if((*it).exist){
@@ -114,17 +119,69 @@ public:
 		            Mat cropped_img = cropImage(warp_frame,r);
 		            Mat resized_img;
 		            cv::resize(cropped_img, resized_img, cv::Size(96, 112));
-				      imwrite("/mnt/storm_out/"+cameraId+timestamp+"_result"+iii+".png",resized_img);
-					   os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<"result"+iii+".png" << std::endl;
+		   //         uchar *pdata = resized_img.data;
+					  // if (strlen(pdata)<32257)
+		           //   os_ << "pdata:"<< strlen(pdata)<< std::endl;
+				   //   imwrite("/mnt/storm_out/"+cameraId+timestamp+"_result"+iii+".png",resized_img);
+					//   os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<"result"+iii+".png" << std::endl;
 					   iii=iii+"i";
+
+					//   uchar *pdata = resized_img.data;
+					   Json::Value newobj;
+					   //string newdata((char*)pdata);
+					//   if (strlen(pdata)>0)
+
+				//	   bzero(input,32258);
+				//	   memcpy(input,pdata,32258);
+				//	   bzero(output,BASE64_ENCODE_OUT_SIZE(32258));
+
+					   	// os_ << "resized_img.total:"<<total<< std::endl;
+
+					  // 	unsigned char *decode = calloc(sizeof(unsigned char),rows*cols+1);
+
+			//		   base64_encode(input, 32258, output);
+			//		   string newdata((char*)output);
+
+
+//################PLAN B
+					   vector<uchar> vecImg;                               //Mat 图片数据转换为vector<uchar>
+					   vector<int> vecCompression_params;
+					   vecCompression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
+					   vecCompression_params.push_back(90);
+					   imencode(".jpg", resized_img, vecImg, vecCompression_params);
+
+					   ZBase64 base64;
+					   string newdata = base64.Encode(vecImg.data(), vecImg.size());
+					   newobj["data"]=Json::Value(newdata);
+
+					 //  	base64_decode(output, BASE64_ENCODE_OUT_SIZE(rows*cols+1) -1, decode);
+					  // Json::Value davi_test;
+
+
+
+					   newobj["cameraId"]=Json::Value(cameraId+iii);
+					   newobj["timestamp"]=Json::Value(timestamp);
+					   newobj["rows"]=Json::Value(rows);
+					   newobj["cols"]=Json::Value(cols);
+					   newobj["type"]=Json::Value(type);
+
+					   //davi_test.append(newobj);
+					   //   std::string out = newobj.toStyledString();
+					   Json::FastWriter writer;
+					   std::string out = writer.write(newobj);
+					   Json::Value outobj;
+					   outobj.append(out);
+					   Tuple t(outobj);
+					   Emit(t);
+
 		         }
 		     }
 		}
-		else
+	/*	else
 		{
 		    imwrite("/mnt/storm_out/"+cameraId+timestamp+".png",mat);
 			os_ << "Created image: /mnt/storm_out/"<<cameraId<<timestamp<<".png" << std::endl;
-		}
+		}*/
 
 	}
 
@@ -132,6 +189,8 @@ private:
 	std::ofstream os_;
 	std::unordered_map<std::string, int> kCount_;
 	mtcnn *findimg;
+//	unsigned char *input;
+//	unsigned char *output;
 };
 
 class SplitSentence : public Bolt

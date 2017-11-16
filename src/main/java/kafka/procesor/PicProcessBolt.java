@@ -19,7 +19,7 @@ public class PicProcessBolt  extends ShellBolt implements IRichBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("image"));
+        declarer.declare(new Fields("message"));
 
     }
 

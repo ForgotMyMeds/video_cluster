@@ -8,21 +8,24 @@ CPP_SRCS += \
 ../src/Storm.cpp \
 ../src/mtcnn.cpp \
 ../src/network.cpp \
-../src/pBox.cpp 
+../src/pBox.cpp \
+../src/ZBase64.cpp
 
 OBJS += \
 ./src/ImageLogic.o \
 ./src/Storm.o \
 ./src/mtcnn.o \
 ./src/network.o \
-./src/pBox.o 
+./src/pBox.o \
+./src/ZBase64.o
 
 CPP_DEPS += \
 ./src/ImageLogic.d \
 ./src/Storm.d \
 ./src/mtcnn.d \
 ./src/network.d \
-./src/pBox.d 
+./src/pBox.d \
+./src/ZBase64.d
 
 
 # Each subdirectory must supply rules for building sources it contributes

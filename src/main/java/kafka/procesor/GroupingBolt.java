@@ -25,12 +25,12 @@ public class GroupingBolt extends BaseRichBolt {
         String record = input.getString(0);
         String camID=record.split("\"")[3];
         collector.emit(input, new Values(record,camID));
+       // collector.emit(input, new Values(record));
         collector.ack(input);
     }
 
     @Override
-    public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("jsonstaff","cam"));
-    }
+    //public void declareOutputFields(OutputFieldsDeclarer declarer) { declarer.declare(new Fields("message"));}
+    public void declareOutputFields(OutputFieldsDeclarer declarer) { declarer.declare(new Fields("jsonstaff","cam")); }
 
 }
