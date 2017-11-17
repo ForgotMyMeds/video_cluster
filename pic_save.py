@@ -6,8 +6,8 @@ import numpy as np
 import cv2
 from cv2 import cv
 
-kafka = KafkaClient("172.17.0.2:9092")
-consumer = SimpleConsumer(kafka,"python","output",max_buffer_size=9932768)
+kafka = KafkaClient("129.168.6.53:9092")
+consumer = SimpleConsumer(kafka,"python","output1",max_buffer_size=9932768)
 for msg in consumer:
   print msg.offset, msg.message.value
   jsonobj = json.loads(msg.message.value)
@@ -22,10 +22,12 @@ for msg in consumer:
   cv.SetData(img_ipl, img_np.tostring(), img_np.dtype.itemsize * 3 * img_np.shape[1])
 
 #  mat = cv.pImgMat(img_ipl,0);
-  filename="/mnt/storm_out/"+jsonobj['cameraId']+jsonobj['timestamp']+".png"
+  filename="/home/zym/storm_out/"+jsonobj['cameraId']+jsonobj['timestamp']+".png"
 #  cv.imwrite(filename,mat)
   cv.ShowImage("output", img_ipl)
   cv.SaveImage(filename, img_ipl)
-  cv.WaitKey(500)
+  cv.WaitKey(10)
+  if not msg.message.value.strip():
+    break
 #  time.sleep(2)
 kafka.close()

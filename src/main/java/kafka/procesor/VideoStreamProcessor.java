@@ -32,21 +32,22 @@ public class VideoStreamProcessor {
     private static final String JsonProject_BOLT_ID = "mytest-bolt";
 
     public static void main(String[] args) throws Exception {
-        String zks = "172.17.0.2:2181,172.17.0.3:2181,172.17.0.4:2181";
+        String zks = "129.168.6.53:2181";
         String topic = "davi";
         String zkRoot = "/kafka-stm";
         BrokerHosts brokerHosts = new ZkHosts(zks);
         SpoutConfig spoutConf = new SpoutConfig(brokerHosts, topic, zkRoot,
                 KAFKA_SPOUT_ID);
         spoutConf.scheme = new SchemeAsMultiScheme(new StringScheme());
-        spoutConf.zkServers = Arrays.asList(new String[] { "172.17.0.2","172.17.0.3","172.17.0.4" });
+        spoutConf.zkServers = Arrays.asList(new String[] { "129.168.6.53" });
         spoutConf.zkPort = 2181;
+        //spoutConf.startOffsetTime = -1;
         //JsonBolt jsonBolt = new JsonBolt();
         PicProcessBolt testBolt = new PicProcessBolt();
         GroupingBolt groupBolt= new GroupingBolt();
 
         Properties prop=new Properties();
-        prop.put("bootstrap.servers","172.17.0.2:9092");
+        prop.put("bootstrap.servers","129.168.6.53:9092");
         prop.put("key.serializer","org.apache.kafka.common.serialization.StringSerializer");
         prop.put("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
         prop.put("max.request.size","1300000");
@@ -62,7 +63,7 @@ public class VideoStreamProcessor {
         builder.setBolt("kafkabolt", kafkabolt).shuffleGrouping(JsonProject_BOLT_ID);
         Config config = new Config();
         Map<String, String> map = new HashMap<String, String>();
-        map.put("metadata.broker.list", "172.17.0.2:9092,172.17.0.3:9092,172.17.0.4:9092");
+        map.put("metadata.broker.list", "129.168.6.53:9092");
         // serializer.class为消息的序列化类
         map.put("serializer.class", "org.apache.kafka.serializer.StringEncoder");
         config.put("kafka.broker.properties", map);

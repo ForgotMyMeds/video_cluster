@@ -69,7 +69,7 @@ public class VideoEventGenerator implements Runnable {
         Gson gson = new Gson();
         while (camera.read(mat)) {
             //resize image before sending
-            Imgproc.resize(mat, mat, new Size(640, 480), 0, 0, Imgproc.INTER_CUBIC);
+            Imgproc.resize(mat, mat, new Size(320, 240), 0, 0, Imgproc.INTER_CUBIC);
             int cols = mat.cols();
             int rows = mat.rows();
             int type = mat.type();

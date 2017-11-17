@@ -97,7 +97,7 @@ public:
 		vector<struct Bbox> outbox;
 		if (findimg->findFace(mat,outbox))
 		{
-			string iii="facei";
+			string iii="face";
 		    for(vector<struct Bbox>::iterator it=outbox.begin(); it!=outbox.end();it++){
 
 		        if((*it).exist){
@@ -164,7 +164,7 @@ public:
 					   newobj["rows"]=Json::Value(rows);
 					   newobj["cols"]=Json::Value(cols);
 					   newobj["type"]=Json::Value(type);
-
+					   os_ << "Created image: "<<cameraId<<timestamp<< std::endl;
 					   //davi_test.append(newobj);
 					   //   std::string out = newobj.toStyledString();
 					   Json::FastWriter writer;
@@ -173,6 +173,7 @@ public:
 					   outobj.append(out);
 					   Tuple t(outobj);
 					   Emit(t);
+					//   Ack(tuple.GetID());
 
 		         }
 		     }
