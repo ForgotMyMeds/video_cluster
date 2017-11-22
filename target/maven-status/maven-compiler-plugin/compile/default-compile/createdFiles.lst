@@ -1,8 +1,0 @@
-kafka/procesor/JsonBolt.class
-kafka/collector/VideoEventGenerator.class
-kafka/procesor/PicProcessBolt.class
-kafka/procesor/MyKafkaBolt.class
-kafka/collector/VideoStreamCollector.class
-kafka/util/PropertyFileReader.class
-kafka/collector/VideoEventGenerator$EventGeneratorCallback.class
-kafka/procesor/VideoStreamProcessor.class

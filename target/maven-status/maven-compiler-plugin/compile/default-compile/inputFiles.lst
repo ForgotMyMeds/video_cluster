@@ -1,7 +1,0 @@
-/home/Video_Cluster/src/main/java/kafka/procesor/JsonBolt.java
-/home/Video_Cluster/src/main/java/kafka/procesor/PicProcessBolt.java
-/home/Video_Cluster/src/main/java/kafka/collector/VideoStreamCollector.java
-/home/Video_Cluster/src/main/java/kafka/procesor/VideoStreamProcessor.java
-/home/Video_Cluster/src/main/java/kafka/util/PropertyFileReader.java
-/home/Video_Cluster/src/main/java/kafka/procesor/MyKafkaBolt.java
-/home/Video_Cluster/src/main/java/kafka/collector/VideoEventGenerator.java
