@@ -26,7 +26,7 @@ for msg in consumer:
 #  cv.imwrite(filename,mat)
   cv.ShowImage("output", img_ipl)
   cv.SaveImage(filename, img_ipl)
-  cv.WaitKey(10)
+  cv.WaitKey(42)
   if not msg.message.value.strip():
     break
 #  time.sleep(2)
