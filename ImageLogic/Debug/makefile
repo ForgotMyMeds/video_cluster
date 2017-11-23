@@ -44,7 +44,7 @@ all: ImageLogic
 ImageLogic: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ `pkg-config --libs --cflags opencv` -o "ImageLogic" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -o "ImageLogic" $(OBJS) $(USER_OBJS) $(LIBS) `pkg-config --libs --cflags opencv`
 	@echo 'Finished building target: $@'
 	@echo ' '
 

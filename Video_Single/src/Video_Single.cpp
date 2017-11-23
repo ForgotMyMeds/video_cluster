@@ -179,8 +179,10 @@ int main(int argc, char **argv){
                 "%% Press Ctrl-C or Ctrl-D to exit\n");
 
    //  while(run && fgets(buf, sizeof(buf), stdin)){
+
 	 while(run){
 		cap>>video_frame;
+		//imshow("raw_video", video_frame);
 		pic_out =  process_Img(findimg,video_frame,cam);
 	    for(vector<string>::iterator it=pic_out.begin(); it!=pic_out.end();it++){
 

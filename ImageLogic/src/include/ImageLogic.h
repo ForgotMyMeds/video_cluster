@@ -23,6 +23,19 @@
 #include "mtcnn.h"
 #include "helpers.hpp"
 
+extern "C"{
+#include "GP_IO.h"
+#include "read_res.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+}
+
+#define ADDR_BEO	0x20000000UL
+#define SIZE_BEO	0x5000000UL
+#define PIC_SIZE  0xFC00UL
+
 using namespace std;
 
 namespace storm
@@ -51,16 +64,161 @@ public:
 	{
     	os_.open("/home/zym/storm_out/test.txt", std::ios_base::out | std::ios_base::app);
 		findimg=new mtcnn(480,640);
+		pPic   = (int*)malloc(sizeof(char)*(PIC_SIZE+1));
+		feature = calloc(sizeof(char),10240);
+		inputData = (float*)calloc(sizeof(float),112*96*3);
 	}
 
 	~ImageLogic()
 	{
 		os_.close();
+		free(pPic);
+		free(feature);
+		free(inputData);
 	}
 
 	void Initialize(Json::Value conf, Json::Value context) {
 		//cout<<"david Initial modle here."<<endl;
 	}
+
+	void Process(Tuple &tuple)
+	{
+		int i = 0;
+		std::string s = tuple.GetValues()[i].asString();
+	//	std::string cameraId = tuple.GetValues()[1].asString();
+		kCount_[s]++;
+	//	os_ << s << ":" << kCount_[s] << std::endl;
+		Json::Reader reader;
+		Json::Value obj;
+		if (!reader.parse(s, obj))
+		{
+			os_ << "Json object creation failed!!!" << std::endl;
+			os_ << s << ":" << kCount_[s] << std::endl;
+			return;
+		}
+		std::string cameraId=obj["cameraId"].asString();
+		std::string timestamp=obj["timestamp"].asString();
+		int cols=obj["cols"].asInt();
+		int rows=obj["rows"].asInt();
+		int type=obj["type"].asInt();
+		std::vector <uchar> ta;
+		std::string decodata = davi_Decode(obj["data"].asString().c_str(),obj["data"].asString().length());
+		ta.resize(decodata.size());
+		ta.assign(decodata.begin(),decodata.end());
+		cv::Mat mat = imdecode(cv::Mat(ta),CV_LOAD_IMAGE_COLOR);
+
+
+
+//		###put new codes here###
+
+		get_feature(mat, pPic, feature, inputData);
+
+//		###put new codes above###
+
+
+		Json::Value newobj;
+		vector<uchar> vecImg;                               //Mat 图片数据转换为vector<uchar>
+		vector<int> vecCompression_params;
+		vecCompression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
+		vecCompression_params.push_back(90);
+		imencode(".jpg", mat, vecImg, vecCompression_params);
+
+		 ZBase64 base64;
+		 string newdata = base64.Encode(vecImg.data(), vecImg.size());
+
+		 newobj["data"]=Json::Value(newdata);
+		 newobj["cameraId"]=Json::Value(cameraId);
+		 newobj["timestamp"]=Json::Value(timestamp);
+		 newobj["rows"]=Json::Value(mat.rows);
+		 newobj["cols"]=Json::Value(mat.cols);
+		 newobj["type"]=Json::Value(mat.type());
+		 newobj["feature"]=Json::Value(feature);
+
+		Json::FastWriter writer;
+		std::string out = writer.write(newobj);
+		Json::Value outobj;
+		outobj.append(out);
+		Tuple t(outobj);
+		Emit(t);
+
+	}
+
+private:
+	std::ofstream os_;
+	std::unordered_map<std::string, int> kCount_;
+	mtcnn *findimg;
+	int *pPic;
+	char* feature;
+	float *inputData;
+
+	int load_pic_hex(float* inputData,int nShift_bit,int pic_len, int* pPic){
+			int i,j,nItem,nReadCount= 0;
+			float fDat0=0.0;
+			float fDat1 = 0.0;
+			float fDat2 = 0.0;
+			float fDat3 = 0.0;
+			int nAllCount = pic_len/4;
+			unsigned int uDat0,uDat1= 0,uDat2,uDat3;
+			unsigned int uDat00,uDat11= 0,uDat22,uDat33;
+			//char sbuf[256],sItem[16];
+			char sItem[16],sbuf[256];
+			float * _inputData = inputData;
+			int lines = 0;
+			for(i=0;i<3;i++){
+				//printf("this is channel%d\n",i);
+				_inputData = inputData+112*96*i;
+					for(j=0;j<112*96;j=j+8)
+					{
+						lines += 1;
+
+							fDat0 = *(_inputData+j);
+							fDat1 = *(_inputData+j+1);
+							fDat2 = *(_inputData+j+2);
+							fDat3 = *(_inputData+j+3);
+
+							uDat0 = (int)(fDat0*(1<<nShift_bit));
+							uDat1 = (int)(fDat1*(1<<nShift_bit));
+							uDat2 = (int)(fDat2*(1<<nShift_bit));
+							uDat3 = (int)(fDat3*(1<<nShift_bit));
+
+
+							fDat0 = *(_inputData+j+4);
+							fDat1 = *(_inputData+j+4+1);
+							fDat2 = *(_inputData+j+4+2);
+							fDat3 = *(_inputData+j+4+3);
+							uDat00 = (int)(fDat0*(1<<nShift_bit));
+							uDat11 = (int)(fDat1*(1<<nShift_bit));
+							uDat22 = (int)(fDat2*(1<<nShift_bit));
+							uDat33 = (int)(fDat3*(1<<nShift_bit));
+							sprintf(sbuf,"%04X%04X%04X%04X%04X%04X%04X%04X",uDat0&0xffff,uDat1&0xffff,uDat2&0xffff,uDat3&0xffff,uDat00&0xffff,uDat11&0xffff,uDat22&0xffff,uDat33&0xffff);
+					//		fprintf(fp,"%04X%04X",uDat00&0xffff,uDat11&0xffff);
+						//	fprintf(fp,"%04X%04X\n",uDat22&0xffff,uDat33&0xffff);
+							//printf("%04X,%04X,%04X,%04X\n",sbuf[0],sbuf[1],sbuf[2],sbuf[3]);
+						//	printf("%04X,%04X,%04X,%04X\n",sbuf[4],sbuf[5],sbuf[6],sbuf[7]);
+						//	printf("this is j%d\n",lines);
+
+							for(int ii=0;ii<32/8;ii++){
+								memcpy(sItem,sbuf+ii*8,8);
+								sItem[8]=0x00;
+								int nRet=sscanf(sItem,"%x",&nItem);
+								if(nRet<1){
+									printf("sscanf error!\r\n");
+									return -1;
+								}
+								*(pPic+nReadCount+3-ii)= (int)nItem;
+							}
+
+							nReadCount +=4;
+						//	printf("##%d\n",nReadCount);
+							if(nReadCount>=nAllCount)
+								break;
+							memset(sbuf,0,sizeof(char)*256);
+					}
+
+			}
+			return 0;
+	}
+
 	std::string davi_Decode(const char* Data,int DataByte)
 	{
 	    //解码表
@@ -114,67 +272,101 @@ public:
 	    return strDecode;
 	}
 
-	void Process(Tuple &tuple)
-	{
-		int i = 0;
-		std::string s = tuple.GetValues()[i].asString();
-	//	std::string cameraId = tuple.GetValues()[1].asString();
-		kCount_[s]++;
-	//	os_ << s << ":" << kCount_[s] << std::endl;
-		Json::Reader reader;
-		Json::Value obj;
-		if (!reader.parse(s, obj))
+	void get_feature(cv::Mat mat, int *pPic, char* feature, float *inputData){
+		cv::Mat mat1;
+		cv::Mat sample_float;
+		int memfd_2;
+		char dev[]="/dev/mem";
+
+		//feature = calloc(sizeof(char),10240);
+		memset(feature,0,sizeof(char)*10240);
+
+		memfd_2 = open(dev, O_RDWR | O_SYNC);
+		if (memfd_2 == -1)
 		{
-			os_ << "Json object creation failed!!!" << std::endl;
-			os_ << s << ":" << kCount_[s] << std::endl;
-			return;
+			fprintf(stderr,"Can't open %s.\n", dev);
+			exit(0);
 		}
-		std::string cameraId=obj["cameraId"].asString();
-		std::string timestamp=obj["timestamp"].asString();
-		int cols=obj["cols"].asInt();
-		int rows=obj["rows"].asInt();
-		int type=obj["type"].asInt();
-		std::vector <uchar> ta;
-		std::string decodata = davi_Decode(obj["data"].asString().c_str(),obj["data"].asString().length());
-		ta.resize(decodata.size());
-		ta.assign(decodata.begin(),decodata.end());
-		cv::Mat mat = imdecode(cv::Mat(ta),CV_LOAD_IMAGE_COLOR);
-
-//		###put new codes here###
 
 
+		//float *inputData = (float*)calloc(sizeof(float),112*96*3);
+		memset(inputData,0,sizeof(float)*112*96*3);
 
+		//float *_inputData = inputData;
+		//char *temp_str = (char*)calloc(sizeof(char),256);
+	//	int *pPic   = (int*)malloc(sizeof(char)*(PIC_SIZE+1));
 
-		Json::Value newobj;
-		vector<uchar> vecImg;                               //Mat 图片数据转换为vector<uchar>
-		vector<int> vecCompression_params;
-		vecCompression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
-		vecCompression_params.push_back(90);
-		imencode(".jpg", mat, vecImg, vecCompression_params);
+		void *mapped_base_dma_addr;
 
-		 ZBase64 base64;
-		 string newdata = base64.Encode(vecImg.data(), vecImg.size());
+		std::vector<cv::Mat> channels;
+		cv::resize(mat, mat1, cv::Size(96, 112), (0, 0), (0, 0), cv::INTER_LINEAR);
+		mat1.convertTo(sample_float, CV_32FC3);
 
-		 newobj["data"]=Json::Value(newdata);
-		 newobj["cameraId"]=Json::Value(cameraId);
-		 newobj["timestamp"]=Json::Value(timestamp);
-		 newobj["rows"]=Json::Value(mat.rows);
-		 newobj["cols"]=Json::Value(mat.cols);
-		 newobj["type"]=Json::Value(mat.type());
+		cv::Mat sample_normalized;
+		sample_normalized = (sample_float-127.5)/128.0;//	cv::subtract(sample_float,m, sample_normalized);
+		cv::split(sample_normalized, channels);
 
-		Json::FastWriter writer;
-		std::string out = writer.write(obj);
-		Json::Value outobj;
-		outobj.append(out);
-		Tuple t(outobj);
-		Emit(t);
+		for (size_t i = 0; i < channels.size(); ++i) {
+			/*channels[i] -= IMG_MEAN;
+			  channels[i] *= IMG_INV_STDDEV;*/
+			//	printf("channels is %d,%d,%d\n",channels.size(),sample_normalized.cols,sample_normalized.rows);
+			memcpy(inputData+ i*sample_normalized.cols * sample_normalized.rows, channels[i].data, sizeof(float) * sample_normalized.cols * sample_normalized.rows);
+			//	std::cout <<"inputData: "<< inputData[200] << std::endl;
+			//_inputData += sample_normalized.cols * sample_normalized.rows;
+		}
 
+		load_pic_hex(inputData,14,PIC_SIZE,pPic);
+
+		mapped_base_dma_addr = mmap(0, SIZE_BEO, PROT_READ | PROT_WRITE, MAP_SHARED, memfd_2, ADDR_BEO);
+		close(memfd_2);
+		if (mapped_base_dma_addr == (void *) -1)
+		{
+			fprintf(stderr,"Can't map the memory to user space.\n");
+			free(pPic);
+			exit(0);
+		}
+		fprintf(stderr,"DDR Memory mapped at address %p.\n", mapped_base_dma_addr);
+
+		int num=0;
+		for(int ii=0;ii<PIC_SIZE/4;ii++)
+		{
+			/*if ((i & 0x3)==0)
+			  num=i>>2;
+			  else
+			  num=0;*/
+			*(((unsigned int*)mapped_base_dma_addr)+ii) = *(pPic+ii);
+			//if ((ii & 0xffff)==0)
+		   //  printf ("%d\n", ii);
+		}
+
+		if (munmap(mapped_base_dma_addr, SIZE_BEO) == -1)
+		{
+			fprintf(stderr,"Can't unmap the memory to user space.\n");
+			free(pPic);
+			exit(0);
+		}
+		fprintf(stderr,"unmap successed.\n");
+
+		GP_IO("write","10000", "0");
+		GP_IO("read","08000", "0");
+		sleep(0.001);
+		GP_IO("write","10050", "10000");
+		GP_IO("write","10060", "34816E0");
+		GP_IO("write","100b0", "0");
+
+		GP_IO("write","10030", "20000000");
+		GP_IO("write","10040", "0000FC00");
+		GP_IO("write","10090", "0");
+
+		GP_IO("write","10070", "20010000");
+
+		GP_IO("write","10110", "400");
+		GP_IO("write","100a0", "0");
+		GP_IO("write","100d0", "0");
+		sleep(0.05);
+
+		read_res(feature);
 	}
-
-private:
-	std::ofstream os_;
-	std::unordered_map<std::string, int> kCount_;
-	mtcnn *findimg;
 };
 
 class SplitSentence : public Bolt

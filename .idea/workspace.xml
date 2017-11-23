@@ -7,9 +7,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d9adbb5-e2be-446c-b3d2-46f9fd5de21b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/pic_save2.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Video_Single/Debug/pic_save.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ImageLogic/Debug/src/ImageLogic.o" afterPath="$PROJECT_DIR$/ImageLogic/Debug/src/ImageLogic.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/Debug/Video_Single" afterPath="$PROJECT_DIR$/Video_Single/Debug/Video_Single" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/Debug/src/Video_Single.o" afterPath="$PROJECT_DIR$/Video_Single/Debug/src/Video_Single.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/Debug/src/ZBase64.o" afterPath="$PROJECT_DIR$/Video_Single/Debug/src/ZBase64.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/Debug/src/mtcnn.o" afterPath="$PROJECT_DIR$/Video_Single/Debug/src/mtcnn.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/Debug/src/network.o" afterPath="$PROJECT_DIR$/Video_Single/Debug/src/network.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/Debug/src/pBox.o" afterPath="$PROJECT_DIR$/Video_Single/Debug/src/pBox.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/artifacts/Video_Cluster_jar/Video_Cluster.jar" afterPath="$PROJECT_DIR$/classes/artifacts/Video_Cluster_jar/Video_Cluster.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pic_save.py" afterPath="$PROJECT_DIR$/pic_save.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ImageLogic/.cproject" afterPath="$PROJECT_DIR$/ImageLogic/.cproject" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ImageLogic/Debug/ImageLogic" afterPath="$PROJECT_DIR$/ImageLogic/Debug/ImageLogic" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ImageLogic/Debug/makefile" afterPath="$PROJECT_DIR$/ImageLogic/Debug/makefile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ImageLogic/Debug/src/ImageLogic.d" afterPath="$PROJECT_DIR$/ImageLogic/Debug/src/ImageLogic.d" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ImageLogic/Debug/src/subdir.mk" afterPath="$PROJECT_DIR$/ImageLogic/Debug/src/subdir.mk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ImageLogic/src/include/ImageLogic.h" afterPath="$PROJECT_DIR$/ImageLogic/src/include/ImageLogic.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/.cproject" afterPath="$PROJECT_DIR$/Video_Single/.cproject" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Video_Single/src/Video_Single.cpp" afterPath="$PROJECT_DIR$/Video_Single/src/Video_Single.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/multilang/resources/ImageLogic" afterPath="$PROJECT_DIR$/multilang/resources/ImageLogic" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,7 +37,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="VideoStreamCollector.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="VideoStreamCollector.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/kafka/collector/VideoStreamCollector.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="216">
@@ -54,7 +70,7 @@
       <file leaf-file-name="VideoEventGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/kafka/collector/VideoEventGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
+            <state relative-caret-position="1170">
               <caret line="81" column="40" lean-forward="false" selection-start-line="81" selection-start-column="36" selection-end-line="81" selection-end-column="40" />
               <folding />
             </state>
@@ -64,7 +80,7 @@
       <file leaf-file-name="GroupingBolt.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/GroupingBolt.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
+            <state relative-caret-position="216">
               <caret line="12" column="38" lean-forward="false" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -86,7 +102,7 @@
       <file leaf-file-name="PicProcessBolt.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/PicProcessBolt.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
+            <state relative-caret-position="288">
               <caret line="16" column="38" lean-forward="false" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -105,13 +121,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VideoStreamProcessor.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VideoStreamProcessor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/VideoStreamProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="474">
-              <caret line="70" column="42" lean-forward="false" selection-start-line="70" selection-start-column="42" selection-end-line="70" selection-end-column="42" />
+            <state relative-caret-position="654">
+              <caret line="78" column="31" lean-forward="false" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3088#3104#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -178,10 +195,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -259,6 +272,10 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -416,6 +433,25 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/MyKafkaBolt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/VideoStreamProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1404">
+          <caret line="78" column="31" lean-forward="false" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3088#3104#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kafka/collector/VideoStreamCollector.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -482,6 +518,7 @@
           <caret line="59" column="53" lean-forward="false" selection-start-line="59" selection-start-column="45" selection-end-line="59" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3088#3104#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -500,6 +537,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3088#3104#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -554,6 +592,7 @@
           <caret line="41" column="13" lean-forward="false" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3088#3104#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -608,6 +647,7 @@
           <caret line="41" column="13" lean-forward="false" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3088#3104#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -669,6 +709,7 @@
           <caret line="52" column="84" lean-forward="true" selection-start-line="52" selection-start-column="84" selection-end-line="52" selection-end-column="84" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3088#3104#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -782,14 +823,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kafka/collector/VideoStreamCollector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="18" column="55" lean-forward="false" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/JsonBolt.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -800,7 +833,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/GroupingBolt.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
+        <state relative-caret-position="216">
           <caret line="12" column="38" lean-forward="false" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -810,7 +843,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/PicProcessBolt.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
+        <state relative-caret-position="288">
           <caret line="16" column="38" lean-forward="false" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -820,7 +853,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kafka/collector/VideoEventGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
+        <state relative-caret-position="1170">
           <caret line="81" column="40" lean-forward="false" selection-start-line="81" selection-start-column="36" selection-end-line="81" selection-end-column="40" />
           <folding />
         </state>
@@ -828,11 +861,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kafka/procesor/VideoStreamProcessor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="70" column="42" lean-forward="false" selection-start-line="70" selection-start-column="42" selection-end-line="70" selection-end-column="42" />
+        <state relative-caret-position="654">
+          <caret line="78" column="31" lean-forward="false" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3088#3104#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kafka/collector/VideoStreamCollector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="18" column="55" lean-forward="false" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>
