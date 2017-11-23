@@ -182,7 +182,8 @@ int main(int argc, char **argv){
 
 	 while(run){
 		cap>>video_frame;
-		//imshow("raw_video", video_frame);
+		imshow("raw_video", video_frame);
+		waitKey(10);
 		pic_out =  process_Img(findimg,video_frame,cam);
 	    for(vector<string>::iterator it=pic_out.begin(); it!=pic_out.end();it++){
 
