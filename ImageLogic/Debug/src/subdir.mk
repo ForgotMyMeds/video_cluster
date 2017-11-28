@@ -13,7 +13,8 @@ CPP_SRCS += \
 
 C_SRCS += \
 ../src/GP_IO.c \
-../src/read_res.c
+../src/read_res.c \
+../src/init0.c
 
 OBJS += \
 ./src/ImageLogic.o \
@@ -23,7 +24,8 @@ OBJS += \
 ./src/pBox.o \
 ./src/ZBase64.o \
 ./src/GP_IO.o \
-./src/read_res.o
+./src/read_res.o \
+./src/init0.o
 
 CPP_DEPS += \
 ./src/ImageLogic.d \
@@ -35,7 +37,8 @@ CPP_DEPS += \
 
 C_DEPS += \
 ./src/GP_IO.d \
-./src/read_res.d
+./src/read_res.d \
+./src/init0.d
 
 
 # Each subdirectory must supply rules for building sources it contributes

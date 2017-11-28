@@ -133,3 +133,27 @@ int GP_IO(char* command, char* address, char* data)
 	return 0;
 }
 
+uint64_t _GP_IO(char* command, char* address)
+{
+	uint64_t ADDR;
+	uint64_t DATA[2];
+
+	hex2dec(address,&ADDR);
+	//printf("ADDR=%lx\n", ADDR);
+
+	void *gpbase;
+	gpbase= mapdev( 0xA0000000UL, 0x20000UL, O_SYNC);
+
+	uint64_t status[2];
+
+	if (strcmp(command,"read") == 0)		//read
+		{
+			memcpy(status,gpbase+ADDR,16);
+			ret = status[0];
+			//printf("read address=%lx, data[127:64]=%lx, data[63:0]=%lx\n", ADDR, status[1], status[0]);
+		}
+
+	unmapdev(gpbase,0x20000UL);
+
+	return ret;
+}

@@ -24,6 +24,7 @@
 #include "helpers.hpp"
 
 extern "C"{
+#include "init0.h"
 #include "GP_IO.h"
 #include "read_res.h"
 #include <stdlib.h>
@@ -272,7 +273,22 @@ private:
 	    return strDecode;
 	}
 
+	static void sleep_ms(unsigned int secs)
+
+	{
+
+	    struct timeval tval;
+
+	    tval.tv_sec=secs/1000;
+
+	    tval.tv_usec=(secs*1000)%1000000;
+
+	    select(0,NULL,NULL,NULL,&tval);
+
+	}
+
 	void get_feature(cv::Mat mat, int *pPic, char* feature, float *inputData){
+		init0();
 		cv::Mat mat1;
 		cv::Mat sample_float;
 		int memfd_2;
@@ -349,10 +365,11 @@ private:
 
 		GP_IO("write","10000", "0");
 		GP_IO("read","08000", "0");
-		sleep(0.001);
+		sleep_ms(2);
 		GP_IO("write","10050", "10000");
 		GP_IO("write","10060", "34816E0");
 		GP_IO("write","100b0", "0");
+		sleep_ms(2);
 
 		GP_IO("write","10030", "20000000");
 		GP_IO("write","10040", "0000FC00");
@@ -363,7 +380,16 @@ private:
 		GP_IO("write","10110", "400");
 		GP_IO("write","100a0", "0");
 		GP_IO("write","100d0", "0");
-		sleep(0.05);
+	//	sleep_ms(45);
+        uint64_t ret;
+        uint32_t ret_;
+      ret =  _GP_IO("read","08000");
+      ret_ = ret&0x8000;
+        while(ret_ != 0){
+                ret = _GP_IO("read","08000");
+                ret_ = ret&0x8000;
+                sleep_ms(1);
+        }
 
 		read_res(feature);
 	}

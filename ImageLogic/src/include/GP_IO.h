@@ -18,6 +18,7 @@
 #include <sys/mman.h>
 
 int GP_IO(char* command, char* address, char* data);
+uint64_t _GP_IO(char* command, char* address);
 int hex2dec(char *hex, uint64_t *O_DATA);
 int char2int(char ch);
 
