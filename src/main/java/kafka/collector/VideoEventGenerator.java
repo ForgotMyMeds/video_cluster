@@ -1,7 +1,7 @@
 package kafka.collector;
 
 import java.sql.Timestamp;
-import java.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.kafka.clients.producer.Callback;
@@ -82,7 +82,7 @@ public class VideoEventGenerator implements Runnable {
             obj.addProperty("rows", rows);
             obj.addProperty("cols", cols);
             obj.addProperty("type", type);
-            obj.addProperty("data", Base64.getEncoder().encodeToString(data));
+            obj.addProperty("data", Base64.encodeBase64String(data));  //getEncoder().encodeToString(data));
             String json = gson.toJson(obj);
             producer.send(new ProducerRecord<String, String>(topic,cameraId, json),new EventGeneratorCallback(cameraId));
             logger.info("Generated events for cameraId="+cameraId+" timestamp="+timestamp);
