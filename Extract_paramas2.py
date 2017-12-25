@@ -20,14 +20,9 @@ IMG_DIR = '/home/zym/imgs'
 NUMSPLIT = 2
 #TARGET_DIR='/media/out'
 
-# 使输出的参数完全显示
-# 若没有这一句，因为参数太多，中间会以省略号“……”的形式代替
 np.set_printoptions(threshold='nan')
-# 保存参数的文件
 #params_txt = 'params.txt'
 #pf = open(params_txt, 'w')
-
-# 让caffe以测试模式读取网络参数
 
 #net = caffe.Net(MODEL_FILE, PRETRAIN_FILE, caffe.TEST)
 imgs1 = commands.getoutput('ls -l %s | awk \'{print $9}\''%IMG_DIR)
@@ -57,7 +52,7 @@ def getQn(x):
   import caffe
   qn = []
   for i in range(127):
-      qn.append(0)
+      qn.append(16)
   net = caffe.Net(MODEL_FILE, PRETRAIN_FILE, caffe.TEST)
   for pic in x:
 
@@ -80,16 +75,13 @@ def getQn(x):
         out = net.blobs[param_name].data[0]
       if "conv" in param_name or "fc5" in param_name:
         bias = net.params[param_name][1].data
-    # 偏置参数
+
 #    bias = net.params[param_name][1].data
 
-    # 该层在prototxt文件中对应“top”的名称
    # pf.write(param_name)
     #pf.write('\n')
- 
-    # 写权重参数
+
    # pf.write('\n' + param_name + '_weight:\n\n')
-    # 权重参数是多维数组，为了方便输出，转为单列数组
       if "conv" in param_name or "fc5" in param_name or "relu" in param_name:
         weight.shape = (-1, 1)
         all_param = weight.flatten().tolist()
@@ -105,7 +97,7 @@ def getQn(x):
       if "conv" in param_name or "fc5" in param_name or "relu" in param_name:
         max_param = np.r_[all_param].max()
         Qw=15-math.ceil(max_param)
-        if qn[i]<Qw:
+        if qn[i]>Qw:
             qn[i]=Qw
         i=i+1
 #        print param_name,'    \tQw\t',int(Qw)
@@ -113,7 +105,7 @@ def getQn(x):
       if not "relu" in param_name:
         max_data = np.r_[all_out].max()
         Qo=15-math.ceil(max_data)
-        if qn[i]<Qo:
+        if qn[i]>Qo:
             qn[i]=Qo
         i=i+1
  #       print param_name,'    \tQo\t',int(Qo)
@@ -122,7 +114,7 @@ def getQn(x):
         all_bias = map(lambda x:davi(x+1), all_bias)
         max_bias = np.r_[all_bias].max()
         Qb=15-math.ceil(max_bias)
-        if qn[i]<Qb:
+        if qn[i]>Qb:
             qn[i]=Qb
         i=i+1
   return qn
@@ -139,10 +131,10 @@ qns = imgs.map(lambda x:getQn(x)).collect()
 Qn=[]
 if len(qns)>1:
     for i in range(127):
-        Qn.append(0)
+        Qn.append(16)
     for i in range(NUMSPLIT):
         for j in range(len(qns[0])):
-            if Qn[j]<qns[i][j]:
+            if Qn[j]>qns[i][j]:
                 Qn[j]=qns[i][j]
 else:
     Qn=qns
