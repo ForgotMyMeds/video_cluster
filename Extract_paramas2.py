@@ -17,6 +17,7 @@ from pyspark import  SparkConf
 MODEL_FILE = '/home/face_deploy.prototxt'
 PRETRAIN_FILE = '/home/fix_cl_model_conv1b_res.caffemodel'
 IMG_DIR = '/home/zym/imgs'
+
 NUMSPLIT = 2
 #TARGET_DIR='/media/out'
 
@@ -57,15 +58,16 @@ def getQn(x):
   for pic in x:
 
     i=0
+    img_name = pic.strip()
+    img = cv2.imread(IMG_DIR + '/' + img_name)
+    img = (np.float32(img) - 127.5) * 0.0078125
+    im_in = cv2.resize(img, (96, 112), interpolation=cv2.INTER_NEAREST)
+    im_in = im_in[None, :]
+    im_in = im_in.transpose((0, 3, 1, 2))
+    net.forward_all(data=im_in)
     for param_name in pp:
 #  if not "relu" in param_name:
-      img_name=pic.strip()
-      img = cv2.imread(IMG_DIR+'/'+img_name)
-      img = (np.float32(img) - 127.5) * 0.0078125
-      im_in = cv2.resize(img, (96, 112), interpolation=cv2.INTER_NEAREST)
-      im_in = im_in[None, :]
-      im_in = im_in.transpose((0, 3, 1, 2))
-      net.forward_all(data=im_in)
+
       all_param = []
       all_out = []
 
@@ -137,7 +139,7 @@ if len(qns)>1:
             if Qn[j]>qns[i][j]:
                 Qn[j]=qns[i][j]
 else:
-    Qn=qns
+    Qn=qns[0]
 print Qn
 
 
